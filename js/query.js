@@ -3,7 +3,13 @@ function postToDutchie(requestKey, retailerId, queryFilterTableIdKey) {
     var pageFileName = window.location.pathname.split("/").pop().replace(/\.[^/.]+$/, "");
     var cfgObj = eval(pageFileName + '_Options') // use current page name to get this menu's config:
 
-    if (cfgObj.showLoadingMessage()){
+    if (cfgObj.enableAutoRefresh){
+        setTimeout(() => { 
+            window.location.reload(true);
+        }, cfgObj.autoRefreshRate * 1000);
+    }
+
+    if (cfgObj.showLoadingMessage){
         $("#resultsDiv").html('loading....');
     }
 
@@ -95,7 +101,7 @@ function postToDutchie(requestKey, retailerId, queryFilterTableIdKey) {
                                     ((cfgObj.showTHCPotencyColumn) ? $('<td class="thc_potency_cell_header">').text('THC %') : null),
                                     ((cfgObj.showStrainTypeColumn) ? $('<td class="strainType_cell_header">').text('Type') : null),
                                     $('<td class="size_cell_header">').text('Size'),
-                                    $('<td class="price_cell_header">').text('$ +tax Incl.')
+                                    $('<td class="price_cell_header">').text('(tax Incl.)')
 
                                 ).appendTo('#records_' + tableFilterKeyArray[Q]);
                             } else {
@@ -137,7 +143,7 @@ function postToDutchie(requestKey, retailerId, queryFilterTableIdKey) {
                                 if (cfgObj.enableTaxInPricing) thePrice = addTaxToPrice(thePrice);
                                 
                                 var $tr = $('<tr '+((special) ? ' style="color: '+cfgObj.legendColorSale+';font-weight: bold;" ' : '')+'>').append(
-                                    ((cfgObj.includeProductShot) ? $('<td class="' + ((special) ? 'image_sale_cell' : 'image_cell') + '">').html('<img style="height: 30%; width: 30%;" src="' + item.image + '">') : null),
+                                    ((cfgObj.includeProductShot) ? $('<td class="' + ((special) ? 'image_sale_cell' : 'image_cell') + '">').html('<img '+((cfgObj.productZoomSize) ? ' style="height: '+cfgObj.productZoomSize+'%; width: '+cfgObj.productZoomSize+'%;"' : '') + ' src="' + item.image + '">') : null),
                                     $('<td class="' + ((special) ? 'brand_sale_cell' : 'brand_cell') + '">').text(item.brand.name),
                                     $('<td class="' + ((special) ? 'name_sale_cell' : 'name_cell') + '">').text(stripAndMoveUnitsFromNames(item.name)),
                                     ((cfgObj.showCBDPotencyColumn) ? $('<td class="' + ((special) ? 'cbd_potency_sale_cell' : 'cbd_potency_cell') + '">').text(potencySanityCheck(item.potencyCbd.formatted)) : null),
@@ -147,22 +153,24 @@ function postToDutchie(requestKey, retailerId, queryFilterTableIdKey) {
                                     $('<td class="' + ((special) ? 'price_sale_cell' : 'price_cell') + '">').text('$ ' + addZeroes(thePrice))
 
                                 ).appendTo('#records_' + tableFilterKeyArray[Q]); // keys must match records_* table id suffix
-
-                                if (cfgObj.enableSplitMenu) {
-                                    $('#records_' + tableFilterKeyArray[Q]).wrap("<div id='columnedContainer'></div>");
-                                }
-                                if (cfgObj.enableStripedTables) { // only when run on final table does it matter
-                                    $("tr:even").css("background-color", "#eeeeee");
-                                    $("tr:odd").css("background-color", "#ffffff");
-                                }
+                                
                             }
                         });
-                    } 
+                        if (cfgObj.enableStripedTables) { 
+                            $("tr:even").css("background-color", "#eeeeee");
+                            $("tr:odd").css("background-color", "#ffffff");
+                        } 
+
+                        if (cfgObj.enableSplitMenu) {
+                            $('#records_' + tableFilterKeyArray[Q]).wrapAll("<div class='columnedContainer_new'></div>");
+                            $('#records_' + tableFilterKeyArray[Q]).css("width","100%").css("font-size","150%");
+                        }
+                    }
                 });
             }
         });
     }
-    if (cfgObj.showLoadingMessage()){
+    if (cfgObj.showLoadingMessage){
         $("#resultsDiv").html('');
     }
 }

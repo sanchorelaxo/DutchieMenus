@@ -33,7 +33,7 @@ table {
   .price_cell {
     width: 10%;
   }
-/* sales styles ----- 
+/* sales styles ----- */
 
 .brand_sale_cell {
     color: rgb(4, 122, 4);
@@ -67,8 +67,6 @@ table {
   color: rgb(4, 122, 4);
   font-weight: bold;
 }
-*/
-
 
   /* not see me */
   td {
@@ -156,6 +154,18 @@ td.price_cell_header{
   font-size: 50%;
   position:relative;
   top:-.6em;
+}
+
+.columnedContainer_new{
+  /*text-align:left;*/
+  /*float:left;*/
+  /*margin:0 auto;*/ 
+  columns: 2;  
+  column-fill: auto;
+  /*column-gap: 20%;*/
+  /*column-gap: 32px;*/
+  /*column-rule: 1px solid #000;*/
+  /*column-width:38%;*/
 }
 
 
