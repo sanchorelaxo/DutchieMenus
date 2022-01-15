@@ -178,6 +178,11 @@ td.price_cell_header{
     font-size: 150%; 
 }
 
+#records_PRE_ROLLS{
+  width: 100%;
+  font-size: 150%; 
+}
+
 #TopImage{
     vertical-align:top
 }

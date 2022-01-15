@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="stylesheet" href="../../widgetContent.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script type="text/javascript" src="../config.js"></script>
+  <script src="../../js/funcs.js"></script>
+  <script src="../../js/query.js"></script>
+  <script>
+    $(document).ready(function () {
+      postToDutchie("public-eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJBUEktQ0xJRU5UIiwiZXhwIjozMzE5NzcwODI3MywiaWF0IjoxNjQwNzk5NDczLCJpc3MiOiJodHRwczovL2R1dGNoaWUuY29tIiwianRpIjoiZTY1YWUwNWEtMjA1Yy00ZGQ3LWE4NTUtOGYxZjcwZjlmZTgwIiwiZW50ZXJwcmlzZV9pZCI6ImI1YTFkODI5LTNjZTgtNDUyNy05MWI4LTQ5OTAzMWQ1M2RlZiIsInV1aWQiOiI5YmMzYzJkNC1kODBkLTQwMDgtYmYwZC1iNmJiMDc2YjllNzUifQ.OoLaJ57U27X-GuKbCQlQCoD1dbe_cA8L-9okpntrYB8",
+        "0a0ca85e-f224-447b-91bb-a87c70756687", 'category')// <-- can only be 'subcategory' 'category' 'strainType', keys must match records_* table id suffixes below
+    });
+  </script>
+</head>
+
+<body>
+  <div style="text-align: right"><img src="../../images/joints_Right.jpg" width="976" height="120"
+      style="vertical-align:top"></div>
+  <div id="resultsDiv"> </div>
+  <h3>Prerolls</h3>
+    <table id="records_PRE_ROLLS"></table>
+  <img src="../../images/joints_Left.jpg" width="976" height="120" style="vertical-align:bottom">
+  <div id="legendDiv"></div>
+</body>
+
+</html>

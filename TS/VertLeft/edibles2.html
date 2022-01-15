@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="stylesheet" href="../../widgetContent.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script type="text/javascript" src="../config.js"></script>
+  <script src="../../js/funcs.js"></script>
+  <script src="../../js/query.js"></script>
+  <script>
+    $(document).ready(function () {
+      postToDutchie("public-eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJBUEktQ0xJRU5UIiwiZXhwIjozMzE5NzcwODI3MywiaWF0IjoxNjQwNzk5NDczLCJpc3MiOiJodHRwczovL2R1dGNoaWUuY29tIiwianRpIjoiZTY1YWUwNWEtMjA1Yy00ZGQ3LWE4NTUtOGYxZjcwZjlmZTgwIiwiZW50ZXJwcmlzZV9pZCI6ImI1YTFkODI5LTNjZTgtNDUyNy05MWI4LTQ5OTAzMWQ1M2RlZiIsInV1aWQiOiI5YmMzYzJkNC1kODBkLTQwMDgtYmYwZC1iNmJiMDc2YjllNzUifQ.OoLaJ57U27X-GuKbCQlQCoD1dbe_cA8L-9okpntrYB8",
+        "13b54069-f005-4a78-a67b-2cb1f94da5bc", 'subcategory')// <-- can only be 'subcategory' 'category' 'strainType', keys must match records_* table id suffixes below
+    });
+  </script>
+</head>
+
+<body>
+  <img src="../../images/ediblesTop_new.jpg" width="1080" height="361" style="vertical-align:top">
+  <h1>Edibles</h1>
+  <section>
+    <div id="resultsDiv"> </div>
+    <h3>Beverages</h3>
+    <table id="records_DRINKS" width="1092">
+    </table>
+    <h3>Chocolates</h3>
+    <table id="records_CHOCOLATES" width="1092">
+    </table>
+    <h3>Chews</h3>
+    <table id="records_CHEWS" width="1092">
+    </table>
+    <h3>Gummies</h3>
+    <table id="records_GUMMIES" width="1092">
+    </table>
+  </section>
+  <div id="legendDiv"></div>
+</body>
+
+</html>
