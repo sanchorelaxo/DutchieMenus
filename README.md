@@ -1,2 +1,2 @@
 # DutchieMenus
-on-store menus powered by dutchie API
+in-store menus powered by dutchie API
