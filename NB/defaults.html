@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="stylesheet" href="../widgetContent.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script>
+
+function addZeroes(num) {
+  const dec = (num + '').split('.')[1]
+  const len = dec && dec.length > 2 ? dec.length : 2
+  return Number(num).toFixed(len)
+}
+
+    $(document).ready(function () {
+      $("#resultsDiv").html('loading....');
+
+      $.ajax({
+        url: "https://plus.dutchie.com/plus/2021-07/graphql",
+        contentType: "application/json",
+        headers: {
+          "Authorization": "public-eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJBUEktQ0xJRU5UIiwiZXhwIjozMzE5NzcwODI3MywiaWF0IjoxNjQwNzk5NDczLCJpc3MiOiJodHRwczovL2R1dGNoaWUuY29tIiwianRpIjoiZTY1YWUwNWEtMjA1Yy00ZGQ3LWE4NTUtOGYxZjcwZjlmZTgwIiwiZW50ZXJwcmlzZV9pZCI6ImI1YTFkODI5LTNjZTgtNDUyNy05MWI4LTQ5OTAzMWQ1M2RlZiIsInV1aWQiOiI5YmMzYzJkNC1kODBkLTQwMDgtYmYwZC1iNmJiMDc2YjllNzUifQ.OoLaJ57U27X-GuKbCQlQCoD1dbe_cA8L-9okpntrYB8"
+        },
+        type: 'POST',
+        data: JSON.stringify({
+          query: `fragment MenuProduct on Product {
+  brand {
+    name
+  }
+  category
+  description
+  id
+  image
+  name
+  potencyCbd {
+    formatted
+  }
+  potencyThc {
+    formatted
+  }
+  strainType
+  variants {
+    option
+    priceRec
+    specialPriceRec
+  }
+}
+query ExampleMenuQuery {
+  menu(sort: { direction: DESC, key: PRICE }
+      pagination: { offset: 0, limit: 400 },
+      filter: { 
+      potencyThc: { min: 0, max: 99, unit: PERCENTAGE }, 
+      potencyCbd: { min: 0, max: 99, unit: PERCENTAGE }, 
+      subcategory: DEFAULT
+      }, 
+      menuType: RECREATIONAL, retailerId: "0a0ca85e-f224-447b-91bb-a87c70756687") {
+    weights # returns an array of available weights, ex: [ "1g", "3.5g" ]
+    products {
+      ...MenuProduct
+    }
+  }
+}`
+        }), //  possible sort keys for above: "NAME" "POPULAR" "PRICE POTENCY"
+        success: function (result) {
+          // $("#resultsDiv").html("<table id='records_table'>"+result.data.menu.products[0].brand.name+"</table>");
+          //$("#resultsDiv").html("<table id='records_table'></table>");
+
+          // convert string to JSON
+          // response = $.parseJSON(response);
+
+          $(function () {
+            if(result.data.menu.products.length > 0){
+                var $tr = $('<tr>').append(
+                  $('<td class="cat_cell_header">').text('Category'),
+                    $('<td class="brand_cell_header">').text('Brand'),
+                    $('<td class="name_cell_header">').text('Name'),
+                    $('<td class="thc_potency_cell_header">').text('THC %'),
+                   // $('<td class="cbd_potency_cell_header">').text('CBD %'),
+                    $('<td class="size_cell_header">').text('Size'),
+                    $('<td class="price_cell_header">').text('$ +tax NOT Incl.')
+
+                  ).appendTo('#records_bath');
+            }
+            $.each(result.data.menu.products, function (i, item) {
+              var $tr = $('<tr>').append(
+                $('<td class="cat_cell">').text(item.category),
+                $('<td class="brand_cell">').text(item.brand.name),
+                $('<td class="name_cell">').text(item.name),
+                $('<td class="thc_potency_cell">').text(item.potencyThc.formatted),
+                $('<td class="weight_cell">').text(item.variants[0].option),
+                $('<td class="price_cell">').text('$ '+ addZeroes(item.variants[0].priceRec))
+
+              ).appendTo('#records_bath');
+              $("tr:even").css("background-color", "#eeeeee");
+              $("tr:odd").css("background-color", "#ffffff");
+              //console.log($tr.wrap('<p>').html());
+            });
+            $("#resultsDiv").html('');
+          });
+        }
+      });
+
+
+
+    });
+  </script>
+</head>
+
+<body>
+  <h1>TO BE CATEGORIZED...</h1>
+  <hr />
+  <section>
+    <div id="resultsDiv"> </div>
+    <h3>products whose subcategory is still set to DEFAULT </h3>
+    <h3>('flower' & 'pre_rolls' menus DON'T use subcategory in query)</h3>
+    <table id="records_bath" style="border-collapse:collapse; width:1094px" width="1092">
+    </table>
+  </section>
+</body>
+
+</html>

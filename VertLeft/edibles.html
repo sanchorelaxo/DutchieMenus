@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="stylesheet" href="../widgetContent.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="../js/funcs.js"></script>
+  <script>
+
+    $(document).ready(function () {
+      $("#resultsDiv").html('loading....');
+
+      // cartridges
+      $.ajax({
+        url: "https://plus.dutchie.com/plus/2021-07/graphql",
+        contentType: "application/json",
+        headers: {
+          "Authorization": "public-eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJBUEktQ0xJRU5UIiwiZXhwIjozMzE5NzcwODI3MywiaWF0IjoxNjQwNzk5NDczLCJpc3MiOiJodHRwczovL2R1dGNoaWUuY29tIiwianRpIjoiZTY1YWUwNWEtMjA1Yy00ZGQ3LWE4NTUtOGYxZjcwZjlmZTgwIiwiZW50ZXJwcmlzZV9pZCI6ImI1YTFkODI5LTNjZTgtNDUyNy05MWI4LTQ5OTAzMWQ1M2RlZiIsInV1aWQiOiI5YmMzYzJkNC1kODBkLTQwMDgtYmYwZC1iNmJiMDc2YjllNzUifQ.OoLaJ57U27X-GuKbCQlQCoD1dbe_cA8L-9okpntrYB8"
+        },
+        type: 'POST',
+        data: JSON.stringify({
+          query: `fragment MenuProduct on Product {
+  brand {
+    name
+  }
+  category
+  description
+  id
+  image
+  name
+  potencyCbd {
+    formatted
+  }
+  potencyThc {
+    formatted
+  }
+  strainType
+  variants {
+    option
+    priceRec
+    specialPriceRec
+  }
+}
+query ExampleMenuQuery {
+  menu(sort: { direction: DESC, key: POPULAR }
+      pagination: { offset: 0, limit: 12 },
+      filter: { 
+      subcategory: DRINKS
+      }, 
+      menuType: RECREATIONAL, retailerId: "84c4bbb3-8daa-48a4-afae-3e390e187fad") {
+    weights # returns an array of available weights, ex: [ "1g", "3.5g" ]
+    products {
+      ...MenuProduct
+    }
+  }
+}`
+        }), //  possible sort keys for above: "NAME" "POPULAR" "PRICE POTENCY"
+        success: function (result) {
+          // $("#resultsDiv").html("<table id='records_table'>"+result.data.menu.products[0].brand.name+"</table>");
+          // $("#resultsDiv").html("<table id='records_table'></table>");
+
+          // convert string to JSON
+          // response = $.parseJSON(response);
+
+          $(function () {
+            if(result.data.menu.products.length > 0){
+                var $tr = $('<tr>').append(
+                    $('<td class="brand_cell_header">').text('Brand'),
+                    $('<td class="name_cell_header">').text('Name'),
+                    $('<td class="cbd_potency_cell_header">').text('CBD %'),
+                    $('<td class="thc_potency_cell_header">').text('THC %'),
+                    $('<td class="size_cell_header">').text('Size'),
+                    $('<td class="price_cell_header">').text('$ +tax Incl.')
+
+                  ).appendTo('#records_drinks');
+            }else{
+              var $tr = $('<tr>').append(
+                $('<td class="outOfStockMsg_cell">').text('(None at the moment)'),
+                $('<td class="name_cell">').text(' '),
+                $('<td class="cbd_potency_cell">').text(' '),
+                $('<td class="thc_potency_cell">').text(' '),
+                $('<td class="weight_cell">').text(' '),
+                $('<td class="price_cell">').text(' ')
+
+                  ).appendTo('#records_drinks');
+            }
+
+            $.each(result.data.menu.products, function (i, item) {
+              var special = item.variants[0].specialPriceRec;
+              if (special) {
+                $("#legendDiv").html('<span class="blinking">GREEN = SPECIALS!!</span>');
+              }
+              var thePrice = ((special) ? special : item.variants[0].priceRec);
+              thePrice = addTaxToPrice(thePrice);
+
+              var cellName = ((special) ? 'brand_sale_cell' : 'brand_cell');
+              var cellName2 = ((special) ? 'name_sale_cell' : 'name_cell');
+              var cellName4 = ((special) ? 'cbd_potency_sale_cell' : 'cbd_potency_cell');
+              var cellName3 = ((special) ? 'thc_potency_sale_cell' : 'thc_potency_cell');
+              var cellName5 = ((special) ? 'weight_sale_cell' : 'weight_cell');
+              var cellName6 = ((special) ? 'price_sale_cell' : 'price_cell');
+
+              var $tr = $('<tr>').append(
+                $('<td class="'+ cellName +'">').text(item.brand.name),
+                $('<td class="'+ cellName2 +'">').text(item.name),
+                $('<td class="'+ cellName4 +'">').text(item.potencyCbd.formatted),
+                $('<td class="'+ cellName3 +'">').text(item.potencyThc.formatted),
+                $('<td class="'+ cellName5 +'">').text(item.variants[0].option),
+                $('<td class="'+ cellName6 +'">').text('$ '+ addZeroes(thePrice))
+
+              ).appendTo('#records_drinks');
+              $("tr:even").css("background-color", "#eeeeee");
+              $("tr:odd").css("background-color", "#ffffff");
+              $("#resultsDiv").html('');
+              //console.log($tr.wrap('<p>').html());
+            });
+          });
+        }
+      });
+
+      // hash
+      $.ajax({
+        url: "https://plus.dutchie.com/plus/2021-07/graphql",
+        contentType: "application/json",
+        headers: {
+          "Authorization": "public-eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJBUEktQ0xJRU5UIiwiZXhwIjozMzE5NzcwODI3MywiaWF0IjoxNjQwNzk5NDczLCJpc3MiOiJodHRwczovL2R1dGNoaWUuY29tIiwianRpIjoiZTY1YWUwNWEtMjA1Yy00ZGQ3LWE4NTUtOGYxZjcwZjlmZTgwIiwiZW50ZXJwcmlzZV9pZCI6ImI1YTFkODI5LTNjZTgtNDUyNy05MWI4LTQ5OTAzMWQ1M2RlZiIsInV1aWQiOiI5YmMzYzJkNC1kODBkLTQwMDgtYmYwZC1iNmJiMDc2YjllNzUifQ.OoLaJ57U27X-GuKbCQlQCoD1dbe_cA8L-9okpntrYB8"
+        },
+        type: 'POST',
+        data: JSON.stringify({
+          query: `fragment MenuProduct on Product {
+  brand {
+    name
+  }
+  category
+  description
+  id
+  image
+  name
+  potencyCbd {
+    formatted
+  }
+  potencyThc {
+    formatted
+  }
+  strainType
+  variants {
+    option
+    priceRec
+    specialPriceRec
+  }
+}
+query ExampleMenuQuery {
+  menu(sort: { direction: DESC, key: POPULAR }
+      pagination: { offset: 0, limit: 12 },
+      filter: { 
+      subcategory: CHOCOLATES
+      }, 
+      menuType: RECREATIONAL, retailerId: "84c4bbb3-8daa-48a4-afae-3e390e187fad") {
+    weights # returns an array of available weights, ex: [ "1g", "3.5g" ]
+    products {
+      ...MenuProduct
+    }
+  }
+}`
+        }), //  possible sort keys for above: "NAME" "POPULAR" "PRICE POTENCY"
+        success: function (result) {
+          // $("#resultsDiv").html("<table id='records_table'>"+result.data.menu.products[0].brand.name+"</table>");
+          //$("#resultsDiv").html("<table id='records_table'></table>");
+
+          // convert string to JSON
+          // response = $.parseJSON(response);
+
+          $(function () {
+            if(result.data.menu.products.length > 0){
+                var $tr = $('<tr>').append(
+                    $('<td class="brand_cell_header">').text('Brand'),
+                    $('<td class="name_cell_header">').text('Name'),
+                    $('<td class="cbd_potency_cell_header">').text('CBD %'),
+                    $('<td class="thc_potency_cell_header">').text('THC %'),
+                    $('<td class="size_cell_header">').text('Size'),
+                    $('<td class="price_cell_header">').text('$ +tax Incl.')
+
+                  ).appendTo('#records_chocolates');
+            }else{
+              var $tr = $('<tr>').append(
+                $('<td class="outOfStockMsg_cell">').text('(None at the moment)'),
+                $('<td class="name_cell">').text(' '),
+                $('<td class="cbd_potency_cell">').text(' '),
+                $('<td class="thc_potency_cell">').text(' '),
+                $('<td class="weight_cell">').text(' '),
+                $('<td class="price_cell">').text(' ')
+
+                  ).appendTo('#records_chocolates');
+            }
+
+            $.each(result.data.menu.products, function (i, item) {
+              var special = item.variants[0].specialPriceRec;
+              if (special) {
+                $("#legendDiv").html('<span class="blinking">GREEN = SPECIALS!!</span>');
+              }
+              var thePrice = ((special) ? special : item.variants[0].priceRec);
+              thePrice = addTaxToPrice(thePrice);
+
+              var cellName = ((special) ? 'brand_sale_cell' : 'brand_cell');
+              var cellName2 = ((special) ? 'name_sale_cell' : 'name_cell');
+              var cellName4 = ((special) ? 'cbd_potency_sale_cell' : 'cbd_potency_cell');
+              var cellName3 = ((special) ? 'thc_potency_sale_cell' : 'thc_potency_cell');
+              var cellName5 = ((special) ? 'weight_sale_cell' : 'weight_cell');
+              var cellName6 = ((special) ? 'price_sale_cell' : 'price_cell');
+
+              var $tr = $('<tr>').append(
+                $('<td class="'+ cellName +'">').text(item.brand.name),
+                $('<td class="'+ cellName2 +'">').text(item.name),
+                $('<td class="'+ cellName4 +'">').text(item.potencyCbd.formatted),
+                $('<td class="'+ cellName3 +'">').text(item.potencyThc.formatted),
+                $('<td class="'+ cellName5 +'">').text(item.variants[0].option),
+                $('<td class="'+ cellName6 +'">').text('$ '+ addZeroes(thePrice))
+
+              ).appendTo('#records_chocolates');
+              $("tr:even").css("background-color", "#eeeeee");
+              $("tr:odd").css("background-color", "#ffffff");
+              //console.log($tr.wrap('<p>').html());
+            });
+            $("#resultsDiv").html('');
+          });
+        }
+      });
+
+      // wax
+      $.ajax({
+        url: "https://plus.dutchie.com/plus/2021-07/graphql",
+        contentType: "application/json",
+        headers: {
+          "Authorization": "public-eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJBUEktQ0xJRU5UIiwiZXhwIjozMzE5NzcwODI3MywiaWF0IjoxNjQwNzk5NDczLCJpc3MiOiJodHRwczovL2R1dGNoaWUuY29tIiwianRpIjoiZTY1YWUwNWEtMjA1Yy00ZGQ3LWE4NTUtOGYxZjcwZjlmZTgwIiwiZW50ZXJwcmlzZV9pZCI6ImI1YTFkODI5LTNjZTgtNDUyNy05MWI4LTQ5OTAzMWQ1M2RlZiIsInV1aWQiOiI5YmMzYzJkNC1kODBkLTQwMDgtYmYwZC1iNmJiMDc2YjllNzUifQ.OoLaJ57U27X-GuKbCQlQCoD1dbe_cA8L-9okpntrYB8"
+        },
+        type: 'POST',
+        data: JSON.stringify({
+          query: `fragment MenuProduct on Product {
+  brand {
+    name
+  }
+  category
+  description
+  id
+  image
+  name
+  potencyCbd {
+    formatted
+  }
+  potencyThc {
+    formatted
+  }
+  strainType
+  variants {
+    option
+    priceRec
+    specialPriceRec
+  }
+}
+query ExampleMenuQuery {
+  menu(sort: { direction: DESC, key: POPULAR }
+      pagination: { offset: 0, limit: 12 },
+      filter: { 
+      subcategory: CHEWS
+      }, 
+      menuType: RECREATIONAL, retailerId: "84c4bbb3-8daa-48a4-afae-3e390e187fad") {
+    weights # returns an array of available weights, ex: [ "1g", "3.5g" ]
+    products {
+      ...MenuProduct
+    }
+  }
+}`
+        }), //  possible sort keys for above: "NAME" "POPULAR" "PRICE POTENCY"
+        success: function (result) {
+          // $("#resultsDiv").html("<table id='records_table'>"+result.data.menu.products[0].brand.name+"</table>");
+          //$("#resultsDiv").html("<table id='records_table'></table>");
+
+          // convert string to JSON
+          // response = $.parseJSON(response);
+
+          $(function () {
+            if(result.data.menu.products.length > 0){
+                var $tr = $('<tr>').append(
+                    $('<td class="brand_cell_header">').text('Brand'),
+                    $('<td class="name_cell_header">').text('Name'),
+                    $('<td class="cbd_potency_cell_header">').text('CBD %'),
+                    $('<td class="thc_potency_cell_header">').text('THC %'),
+                    $('<td class="size_cell_header">').text('Size'),
+                    $('<td class="price_cell_header">').text('$ +tax Incl.')
+
+                  ).appendTo('#records_chews');
+            }else{
+              var $tr = $('<tr>').append(
+                $('<td class="outOfStockMsg_cell">').text('(None at the moment)'),
+                $('<td class="name_cell">').text(' '),
+                $('<td class="cbd_potency_cell">').text(' '),
+                $('<td class="thc_potency_cell">').text(' '),
+                $('<td class="weight_cell">').text(' '),
+                $('<td class="price_cell">').text(' ')
+
+                  ).appendTo('#records_chews');
+            }
+
+            $.each(result.data.menu.products, function (i, item) {
+              var special = item.variants[0].specialPriceRec;
+              if (special) {
+                $("#legendDiv").html('<span class="blinking">GREEN = SPECIALS!!</span>');
+              }
+              var thePrice = ((special) ? special : item.variants[0].priceRec);
+              thePrice = addTaxToPrice(thePrice);
+
+              var cellName = ((special) ? 'brand_sale_cell' : 'brand_cell');
+              var cellName2 = ((special) ? 'name_sale_cell' : 'name_cell');
+              var cellName4 = ((special) ? 'cbd_potency_sale_cell' : 'cbd_potency_cell');
+              var cellName3 = ((special) ? 'thc_potency_sale_cell' : 'thc_potency_cell');
+              var cellName5 = ((special) ? 'weight_sale_cell' : 'weight_cell');
+              var cellName6 = ((special) ? 'price_sale_cell' : 'price_cell');
+
+              var $tr = $('<tr>').append(
+                $('<td class="'+ cellName +'">').text(item.brand.name),
+                $('<td class="'+ cellName2 +'">').text(item.name),
+                $('<td class="'+ cellName4 +'">').text(item.potencyCbd.formatted),
+                $('<td class="'+ cellName3 +'">').text(item.potencyThc.formatted),
+                $('<td class="'+ cellName5 +'">').text(item.variants[0].option),
+                $('<td class="'+ cellName6 +'">').text('$ '+ addZeroes(thePrice))
+
+              ).appendTo('#records_chews');
+              $("tr:even").css("background-color", "#eeeeee");
+              $("tr:odd").css("background-color", "#ffffff");
+              //console.log($tr.wrap('<p>').html());
+            });
+            $("#resultsDiv").html('');
+          });
+        }
+      });
+
+
+// gummies
+      // wax
+      $.ajax({
+        url: "https://plus.dutchie.com/plus/2021-07/graphql",
+        contentType: "application/json",
+        headers: {
+          "Authorization": "public-eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJBUEktQ0xJRU5UIiwiZXhwIjozMzE5NzcwODI3MywiaWF0IjoxNjQwNzk5NDczLCJpc3MiOiJodHRwczovL2R1dGNoaWUuY29tIiwianRpIjoiZTY1YWUwNWEtMjA1Yy00ZGQ3LWE4NTUtOGYxZjcwZjlmZTgwIiwiZW50ZXJwcmlzZV9pZCI6ImI1YTFkODI5LTNjZTgtNDUyNy05MWI4LTQ5OTAzMWQ1M2RlZiIsInV1aWQiOiI5YmMzYzJkNC1kODBkLTQwMDgtYmYwZC1iNmJiMDc2YjllNzUifQ.OoLaJ57U27X-GuKbCQlQCoD1dbe_cA8L-9okpntrYB8"
+        },
+        type: 'POST',
+        data: JSON.stringify({
+          query: `fragment MenuProduct on Product {
+  brand {
+    name
+  }
+  category
+  description
+  id
+  image
+  name
+  potencyCbd {
+    formatted
+  }
+  potencyThc {
+    formatted
+  }
+  strainType
+  variants {
+    option
+    priceRec
+    specialPriceRec
+  }
+}
+query ExampleMenuQuery {
+  menu(sort: { direction: DESC, key: POPULAR }
+      pagination: { offset: 0, limit: 12 },
+      filter: { 
+      subcategory: GUMMIES
+      }, 
+      menuType: RECREATIONAL, retailerId: "84c4bbb3-8daa-48a4-afae-3e390e187fad") {
+    weights # returns an array of available weights, ex: [ "1g", "3.5g" ]
+    products {
+      ...MenuProduct
+    }
+  }
+}`
+        }), //  possible sort keys for above: "NAME" "POPULAR" "PRICE POTENCY"
+        success: function (result) {
+          // $("#resultsDiv").html("<table id='records_table'>"+result.data.menu.products[0].brand.name+"</table>");
+          //$("#resultsDiv").html("<table id='records_table'></table>");
+
+          // convert string to JSON
+          // response = $.parseJSON(response);
+
+          $(function () {
+            if(result.data.menu.products.length > 0){
+                var $tr = $('<tr>').append(
+                    $('<td class="brand_cell_header">').text('Brand'),
+                    $('<td class="name_cell_header">').text('Name'),
+                    $('<td class="cbd_potency_cell_header">').text('CBD %'),
+                    $('<td class="thc_potency_cell_header">').text('THC %'),
+                    $('<td class="size_cell_header">').text('Size'),
+                    $('<td class="price_cell_header">').text('$ +tax Incl.')
+
+                  ).appendTo('#records_gummies');
+            }else{
+              var $tr = $('<tr>').append(
+                $('<td class="outOfStockMsg_cell">').text('(None at the moment)'),
+                $('<td class="name_cell">').text(' '),
+                $('<td class="cbd_potency_cell">').text(' '),
+                $('<td class="thc_potency_cell">').text(' '),
+                $('<td class="weight_cell">').text(' '),
+                $('<td class="price_cell">').text(' ')
+
+                  ).appendTo('#records_gummies');
+            }
+
+            $.each(result.data.menu.products, function (i, item) {
+              var special = item.variants[0].specialPriceRec;
+              if (special) {
+                $("#legendDiv").html('<span class="blinking">GREEN = SPECIALS!!</span>');
+              }
+              var thePrice = ((special) ? special : item.variants[0].priceRec);
+              thePrice = addTaxToPrice(thePrice);
+
+              var cellName = ((special) ? 'brand_sale_cell' : 'brand_cell');
+              var cellName2 = ((special) ? 'name_sale_cell' : 'name_cell');
+              var cellName4 = ((special) ? 'cbd_potency_sale_cell' : 'cbd_potency_cell');
+              var cellName3 = ((special) ? 'thc_potency_sale_cell' : 'thc_potency_cell');
+              var cellName5 = ((special) ? 'weight_sale_cell' : 'weight_cell');
+              var cellName6 = ((special) ? 'price_sale_cell' : 'price_cell');
+
+              var $tr = $('<tr>').append(
+                $('<td class="'+ cellName +'">').text(item.brand.name),
+                $('<td class="'+ cellName2 +'">').text(item.name),
+                $('<td class="'+ cellName4 +'">').text(item.potencyCbd.formatted),
+                $('<td class="'+ cellName3 +'">').text(item.potencyThc.formatted),
+                $('<td class="'+ cellName5 +'">').text(item.variants[0].option),
+                $('<td class="'+ cellName6 +'">').text('$ '+ addZeroes(thePrice))
+
+              ).appendTo('#records_gummies');
+              $("tr:even").css("background-color", "#eeeeee");
+              $("tr:odd").css("background-color", "#ffffff");
+              $("#resultsDiv").html('');
+              //console.log($tr.wrap('<p>').html());
+            });
+          });
+        }
+      });
+    });
+  </script>
+</head>
+
+<body>
+  <img src="../images/ediblesTop_new.jpg" width="1080" height="361" style="vertical-align:top">
+  <h1>Edibles</h1>
+  <section>
+    <div id="resultsDiv"> </div>
+    <h3>Beverages</h3>
+    <table id="records_drinks" width="1092">
+    </table>
+    <h3>Chocolates</h3>
+    <table id="records_chocolates" width="1092">
+    </table>
+    <h3>Chews</h3>
+    <table id="records_chews" width="1092">
+    </table>
+    <h3>Gummies</h3>
+    <table id="records_gummies" width="1092">
+    </table>
+  </section>
+  <div id="legendDiv"></div>
+</body>
+</html>

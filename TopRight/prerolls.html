@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <link rel="stylesheet" href="../widgetContent.css">
+      <script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+      <script src="../js/funcs.js"></script>
+      <script>
+    
+        $(document).ready(function () {
+               $("#resultsDiv").html('loading....');
+               $.ajax({url: "https://plus.dutchie.com/plus/2021-07/graphql",
+                  contentType: "application/json",
+                  headers: {
+                        "Authorization": "public-eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJBUEktQ0xJRU5UIiwiZXhwIjozMzE5NzcwODI3MywiaWF0IjoxNjQwNzk5NDczLCJpc3MiOiJodHRwczovL2R1dGNoaWUuY29tIiwianRpIjoiZTY1YWUwNWEtMjA1Yy00ZGQ3LWE4NTUtOGYxZjcwZjlmZTgwIiwiZW50ZXJwcmlzZV9pZCI6ImI1YTFkODI5LTNjZTgtNDUyNy05MWI4LTQ5OTAzMWQ1M2RlZiIsInV1aWQiOiI5YmMzYzJkNC1kODBkLTQwMDgtYmYwZC1iNmJiMDc2YjllNzUifQ.OoLaJ57U27X-GuKbCQlQCoD1dbe_cA8L-9okpntrYB8"
+                    },
+                  type:'POST',
+                  data: JSON.stringify({ query:`fragment MenuProduct on Product {
+  brand {
+    name
+  }
+  category
+  description
+  id
+  image
+  name
+  potencyCbd {
+    formatted
+  }
+  potencyThc {
+    formatted
+  }
+  strainType
+  variants {
+    option
+    priceRec
+    specialPriceRec
+  }
+}
+query ExampleMenuQuery {
+  menu(sort: { direction: DESC, key: PRICE }
+      pagination: { offset: 0, limit: 35 },
+      filter: { 
+      category: PRE_ROLLS
+      }, 
+      menuType: RECREATIONAL, retailerId: "84c4bbb3-8daa-48a4-afae-3e390e187fad") {
+    weights # returns an array of available weights, ex: [ "1g", "3.5g" ]
+    products {
+      ...MenuProduct
+    }
+  }
+}`
+                  }), //  possible sort keys for above: "NAME" "POPULAR" "PRICE POTENCY"
+                  success: function(result) {
+                    // $("#resultsDiv").html("<table id='records_preroll_table'>"+result.data.menu.products[0].brand.name+"</table>");
+                   // $("#resultsDiv").html("<table id='records_preroll_table'></table>");
+
+                    // convert string to JSON
+                   // response = $.parseJSON(response);
+
+                    $(function() {
+            if(result.data.menu.products.length > 0){
+                var $tr = $('<tr>').append(
+                    $('<td class="brand_cell_header">').text('Brand'),
+                    $('<td class="name_cell_header">').text('Name'),
+                   $('<td class="thc_potency_cell_header">').text('THC %'),
+                   // $('<td class="cbd_potency_cell_header">').text('CBD %'),
+                    $('<td class="size_cell_header">').text('Size'),
+                    $('<td class="price_cell_header">').text('$ +tax Incl.')
+
+                  ).appendTo('#records_preroll_table');
+            }else{
+              var $tr = $('<tr>').append(
+                $('<td class="outOfStockMsg_cell">').text('(None at the moment)'),
+                $('<td class="name_cell">').text(' '),
+                $('<td class="thc_potency_cell">').text(' '),
+               // $('<td class="cbd_potency_cell">').text(' '),
+                $('<td class="weight_cell">').text(' '),
+                $('<td class="price_cell">').text(' ')
+
+                  ).appendTo('#records_oils');
+            }
+
+            $.each(result.data.menu.products, function (i, item) {
+              var special = item.variants[0].specialPriceRec;
+              if (special) {
+                $("#legendDiv").html('<span class="blinking">GREEN = SPECIALS!!</span>');
+              }
+              var thePrice = ((special) ? special : item.variants[0].priceRec);
+              thePrice = addTaxToPrice(thePrice);
+             
+              var cellName = ((special) ? 'brand_sale_cell' : 'brand_cell');
+              var cellName2 = ((special) ? 'name_sale_cell' : 'name_cell');
+              var cellName3 = ((special) ? 'thc_potency_sale_cell' : 'thc_potency_cell');
+              var cellName4 = ((special) ? 'weight_sale_cell' : 'weight_cell');
+              var cellName5 = ((special) ? 'price_sale_cell' : 'price_cell');
+
+              var $tr = $('<tr>').append(
+                $('<td class="'+ cellName +'">').text(item.brand.name),
+                $('<td class="'+ cellName2 +'">').text(item.name),
+                $('<td class="'+ cellName3 +'">').text(item.potencyThc.formatted),
+                $('<td class="'+ cellName4 +'">').text(item.variants[0].option),
+                $('<td class="'+ cellName5 +'">').text('$ '+ addZeroes(thePrice))
+                  
+                ).appendTo('#records_preroll_table');
+                $("tr:even").css("background-color", "#eeeeee");
+                $("tr:odd").css("background-color", "#ffffff");
+                //console.log($tr.wrap('<p>').html());
+            });
+            $("#resultsDiv").html('');
+              });
+            }
+          });
+         });
+      </script>
+   </head>
+   
+   <body>
+     <div style="text-align: right"><img src="../images/joints_Right.jpg" width="976" height="120" style="vertical-align:top"></div>
+    <div id="resultsDiv"> </div>
+    <h3>Prerolls</h3>
+    <div id='columnedContainer'>
+      <table id="records_preroll_table"></table>
+      <!-- img src="../images/prerollsSide.jpg" /-->
+    </div>
+    <img src="../images/joints_Left.jpg" width="976" height="120" style="vertical-align:bottom">
+    <div id="legendDiv"></div>
+ </body>
+
+</html>
