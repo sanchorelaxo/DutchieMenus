@@ -77,7 +77,7 @@ query ExampleMenuQuery {
                 $('<td class="weight_cell">').text(' '),
                 $('<td class="price_cell">').text(' ')
 
-                  ).appendTo('#records_oils');
+                  ).appendTo('#records_preroll_table');
             }
 
             $.each(result.data.menu.products, function (i, item) {
@@ -115,14 +115,15 @@ query ExampleMenuQuery {
    </head>
    
    <body>
+     <div style="text-align: right"><img src="../../images/joints_Right.jpg" width="976" height="120" style="vertical-align:top"></div>
     <div id="resultsDiv"> </div>
-    <div id="leftSideImage"><img src="../../images/prerollsSide.jpg" width="167" height="1079"></div>
-    <div id='middleContainer'>
-      <h3>Prerolls</h3>
+    <h3>Prerolls</h3>
+    <div id='columnedContainer'>
       <table id="records_preroll_table"></table>
+      <!-- img src="../images/prerollsSide.jpg" /-->
     </div>
-    <div id="rightSideImage"><img src="../../images/prerollsSide.jpg" width="167" height="1079" /></div>
+    <img src="../../images/joints_Left.jpg" width="976" height="120" style="vertical-align:bottom">
     <div id="legendDiv"></div>
-  </body>
+ </body>
 
 </html>

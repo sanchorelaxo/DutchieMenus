@@ -43,9 +43,9 @@
 }
 query ExampleMenuQuery {
   menu(sort: { direction: DESC, key: POPULAR }
-      pagination: { offset: 0, limit: 15 },
+      pagination: { offset: 0, limit: 20 },
       filter: { 
-      subcategory: TOPICAL_OILS
+      subcategory: OIL
       }, 
       menuType: RECREATIONAL, retailerId: "0a0ca85e-f224-447b-91bb-a87c70756687") {
     weights # returns an array of available weights, ex: [ "1g", "3.5g" ]
@@ -455,7 +455,7 @@ query ExampleMenuQuery {
   <h1>Topicals</h1>
   <section>
     <div id="resultsDiv"></div>
-    <h3>Oils</h3>
+    <h3>Oil</h3>
     <table id="records_oils" style="border-collapse:collapse; width:1094px" width="1092">
     </table>
     <h3>Capsules</h3>

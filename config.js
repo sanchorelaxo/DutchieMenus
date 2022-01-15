@@ -1,30 +1,115 @@
-prerolls_Options = {
-    category: 'PRE_ROLLS',
-    subcategory: '',
-    strainType: '',
-    maxEntries: 35
+topicals2_Options = {
+    queries_maxEntries: [5,4,2,3], /*  <-- array length USED as table row count */
+    queries_sort_key: 'POPULAR', /* can only be 'NAME' 'POPULAR' 'PRICE' 'POTENCY' */
+    queries_filter_category: [],
+    queries_filter_subcategory: [ 'OIL','CAPSULES_TABLETS','LOTIONS','BATH_PRODUCTS' ],
+    queries_filter_strainType: [],
+    showCBDPotencyColumn : true,
+    showTHCPotencyColumn : true,
+    showStrainTypeColumn : true,
+    enableTaxInPricing : true,
+    legendColorSale: 'rgb(4, 122, 4)',
+    legendColorLimited: 'red',
+    enableStripedTables : true,
+    includeProductShot : false,
+    includeLegend : true,
+    ignoreNAUnitSize : true,
+    enableUnitStrippingFromNames : false,
+    enableSplitMenu : true,
+    enablePotencyAsIcons : false,
+    enablePotencySanityCheck  : false,
+    enableDebugToConsole : true,
+    showLoadingMessage : false
 },
-edibles_DRINKS_Options = {
-    category: 'EDIBLES',
-    subcategory: 'DRINKS',
-    strainType: '',
-    maxEntries: 12
-  },
-edibles_CHOCOLATES_Options = {
-    category: 'EDIBLES',
-    subcategory: 'CHOCOLATES',
-    strainType: '',
-    maxEntries: 12
+edibles2_Options = {
+  queries_maxEntries: [12,9,8,7], /*  <-- array length USED as table row count */
+  queries_sort_key: 'POPULAR',
+  queries_filter_category: [],
+  queries_filter_subcategory: [ 'DRINKS','CHOCOLATES','CHEWS','GUMMIES' ],
+  queries_filter_strainType: [],
+  showCBDPotencyColumn : true,
+  showTHCPotencyColumn : true,
+  showStrainTypeColumn : true,
+  enableTaxInPricing : true,
+  legendColorSale: 'rgb(4, 122, 4)',
+  legendColorLimited: 'red',
+  enableStripedTables : true,
+  includeProductShot : false,
+  includeLegend : true,
+  ignoreNAUnitSize : true,
+  enableUnitStrippingFromNames : false,
+  enableSplitMenu : true,
+  enablePotencyAsIcons : false,
+  enablePotencySanityCheck  : false,
+  enableDebugToConsole : true,
+  showLoadingMessage : false
 },
-edibles_CHEWS_Options = {
-    category: 'EDIBLES',
-    subcategory: 'CHEWS',
-    strainType: '',
-    maxEntries: 12
-  },
-edibles_GUMMIES_Options = {
-    category: 'EDIBLES',
-    subcategory: 'GUMMIES',
-    strainType: '',
-    maxEntries: 12
+flower2_Options = {
+  queries_maxEntries: [12,9,8,7], /*  <-- array length USED as table row count */
+  queries_sort_key: 'POPULAR',
+  queries_filter_category: ['FLOWER','FLOWER', 'FLOWER'],
+  queries_filter_subcategory: [],
+  queries_filter_strainType: ['HYBRID', 'INDICA', 'SATIVA'],
+  showCBDPotencyColumn : true,
+  showTHCPotencyColumn : true,
+  showStrainTypeColumn : true,
+  enableTaxInPricing : true,
+  legendColorSale: 'rgb(4, 122, 4)',
+  legendColorLimited: 'red',
+  enableStripedTables : true,
+  includeProductShot : false,
+  includeLegend : true,
+  ignoreNAUnitSize : true,
+  enableUnitStrippingFromNames : false,
+  enableSplitMenu : true,
+  enablePotencyAsIcons : false,
+  enablePotencySanityCheck  : false,
+  enableDebugToConsole : true,
+  showLoadingMessage : false
+},
+xtrax2_Options = {
+  queries_maxEntries: [8,3,2,2,2], /*  <-- array length USED as table row count */
+  queries_sort_key: 'POPULAR',
+  queries_filter_category: [],
+  queries_filter_subcategory: [ 'CARTRIDGES','HASH','LIVE_RESIN','KIEF','SHATTER'],
+  queries_filter_strainType: [],
+  showCBDPotencyColumn : false,
+  showTHCPotencyColumn : true,
+  showStrainTypeColumn : false,
+  enableTaxInPricing : true,
+  legendColorSale: 'rgb(4, 122, 4)',
+  legendColorLimited: 'red',
+  enableStripedTables : true,
+  includeProductShot : true,
+  includeLegend : true,
+  ignoreNAUnitSize : true,
+  enableUnitStrippingFromNames : false,
+  enableSplitMenu : true,
+  enablePotencyAsIcons : false,
+  enablePotencySanityCheck  : false,
+  enableDebugToConsole : true,
+  showLoadingMessage : false
+},
+prerolls2_Options = {
+  queries_maxEntries: [35], /*  <-- array length USED as table row count */
+  queries_sort_key: 'PRICE',
+  queries_filter_category: ['PRE_ROLLS'],
+  queries_filter_subcategory: [],
+  queries_filter_strainType: [],
+  showCBDPotencyColumn : false,
+  showTHCPotencyColumn : true,
+  showStrainTypeColumn : false,
+  enableTaxInPricing : true,
+  legendColorSale: 'rgb(4, 122, 4)',
+  legendColorLimited: 'red',
+  enableStripedTables : true,
+  includeProductShot : true,
+  includeLegend : true,
+  ignoreNAUnitSize : true,
+  enableUnitStrippingFromNames : false,
+  enableSplitMenu : true,
+  enablePotencyAsIcons : false,
+  enablePotencySanityCheck  : false,
+  enableDebugToConsole : true,
+  showLoadingMessage : false
 }

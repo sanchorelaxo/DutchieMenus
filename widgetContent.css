@@ -137,6 +137,9 @@ td.thc_potency_cell_header{
 td.cbd_potency_cell_header{
   font-weight: bolder;
 }
+td.strainType_cell_header{
+  font-weight: bolder;
+}
 td.size_cell_header{
     font-weight: bolder;
     width: 10%;
