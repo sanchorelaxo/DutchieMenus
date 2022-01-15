@@ -14,11 +14,53 @@ function addTaxToPrice(thePrice){
     return thePrice;
 }
 
-/*
-function DutchieAPI_GET(filterString, itemType) {
-    if (type == 'menu'){
-        return 'foo'
-    }
-    return
+function toTitleCase(str) {
+    return str.replace(
+      /\w\S*/g,
+      function(txt) {
+        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+      }
+    );
 }
-*/
+
+function potencySanityCheck(fieldVal) {
+    if (fieldVal && fieldVal.indexOf('%') > 0 && fieldVal.indexOf('-') < 0) { // excluding percentage ranges
+        try {
+            fieldVal = fieldVal.replace(/\s/g, '')// remove spaces
+            var checkFieldVal = fieldVal.substr(0, fieldVal.indexOf('%')); // assumes '%' IS ALWAYS RIGHT OF NUMBER VALUE
+            /*if (fieldVal.indexOf(fieldVal.match(/\d/)) > 0){ // if any digits
+                fieldVal = fieldVal.substr(fieldVal.indexOf(fieldVal.match(/\d/)), fieldVal.length);
+            }else{
+                return fieldVal
+            }*/
+            // all sanity checks to be done here:
+            if (Number(checkFieldVal) > 99) return ''; // if percent is above 99, wipe the cell value 
+
+        } catch (err) {
+            console.log(err)
+            return fieldVal
+        }
+        return fieldVal
+    } else {
+        return fieldVal
+    }
+}
+
+function stripAndMoveUnitsFromNames(fieldVal) {
+    if (fieldVal && fieldVal.indexOf('|') > 0) {
+        try {
+            var unitStr = fieldVal.split('|')[1];
+            var nameStr = fieldVal.split('|')[0];
+            // TODO: set the thc_potency_cell = unitStr for this table only, 
+            // ie need to gen ids for cells when building TRs
+
+            return nameStr;
+        }
+        catch (err) {
+            console.log(err)
+            return fieldVal
+        }
+    } else {
+        return fieldVal
+    }
+}

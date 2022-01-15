@@ -8,15 +8,9 @@
   <script src="../js/funcs.js"></script>
   <script src="../js/query.js"></script>
   <script>
-
     $(document).ready(function () {
-      $("#resultsDiv").html('loading....');
-
-      postToDutchie("public-eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJBUEktQ0xJRU5UIiwiZXhwIjozMzE5NzcwODI3MywiaWF0IjoxNjQwNzk5NDczLCJpc3MiOiJodHRwczovL2R1dGNoaWUuY29tIiwianRpIjoiZTY1YWUwNWEtMjA1Yy00ZGQ3LWE4NTUtOGYxZjcwZjlmZTgwIiwiZW50ZXJwcmlzZV9pZCI6ImI1YTFkODI5LTNjZTgtNDUyNy05MWI4LTQ5OTAzMWQ1M2RlZiIsInV1aWQiOiI5YmMzYzJkNC1kODBkLTQwMDgtYmYwZC1iNmJiMDc2YjllNzUifQ.OoLaJ57U27X-GuKbCQlQCoD1dbe_cA8L-9okpntrYB8", 
-      "84c4bbb3-8daa-48a4-afae-3e390e187fad", 'subcategory')
-
-      $("#resultsDiv").html('');
-
+      postToDutchie("public-eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJBUEktQ0xJRU5UIiwiZXhwIjozMzE5NzcwODI3MywiaWF0IjoxNjQwNzk5NDczLCJpc3MiOiJodHRwczovL2R1dGNoaWUuY29tIiwianRpIjoiZTY1YWUwNWEtMjA1Yy00ZGQ3LWE4NTUtOGYxZjcwZjlmZTgwIiwiZW50ZXJwcmlzZV9pZCI6ImI1YTFkODI5LTNjZTgtNDUyNy05MWI4LTQ5OTAzMWQ1M2RlZiIsInV1aWQiOiI5YmMzYzJkNC1kODBkLTQwMDgtYmYwZC1iNmJiMDc2YjllNzUifQ.OoLaJ57U27X-GuKbCQlQCoD1dbe_cA8L-9okpntrYB8",
+        "84c4bbb3-8daa-48a4-afae-3e390e187fad", 'subcategory')// <-- can only be 'subcategory' 'category' 'strainType', keys must match records_* table id suffixes below
     });
   </script>
 </head>
@@ -39,7 +33,7 @@
     <table id="records_BATH_PRODUCTS" width="1092">
     </table>
   </section>
-  <br/>
+  <br />
   <img src="../images/cbd_bottom.jpg" width="1080" height="455" style="vertical-align:bottom">
   <div id="legendDiv"></div>
 </body>

@@ -33,7 +33,7 @@ table {
   .price_cell {
     width: 10%;
   }
-/* sales styles ----- */
+/* sales styles ----- 
 
 .brand_sale_cell {
     color: rgb(4, 122, 4);
@@ -67,6 +67,8 @@ table {
   color: rgb(4, 122, 4);
   font-weight: bold;
 }
+*/
+
 
   /* not see me */
   td {
