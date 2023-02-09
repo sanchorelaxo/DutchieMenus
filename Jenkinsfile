@@ -54,7 +54,7 @@ pipeline {
             useWorkspaceInPromotion: false,
             verbose: true]
         ]
-      }
+      ]
     }
   }
 }
