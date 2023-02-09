@@ -5,7 +5,7 @@
       <script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
       <script src="../js/funcs.js"></script>
       <script>
-    
+
         $(document).ready(function () {
                $("#resultsDiv").html('loading....');
                $.ajax({url: "https://plus.dutchie.com/plus/2021-07/graphql",
@@ -37,8 +37,11 @@
   }
 }
 query ExampleMenuQuery {
-  menu(sort: { direction: DESC, key: PRICE }
-      pagination: { offset: 0, limit: 35 },
+
+  menu(sort: { direction: DESC, key: POPULAR }
+
+      pagination: { offset: 0, limit: 75 },
+
       filter: { 
       category: PRE_ROLLS
       }, 
@@ -87,7 +90,7 @@ query ExampleMenuQuery {
               }
               var thePrice = ((special) ? special : item.variants[0].priceRec);
               thePrice = addTaxToPrice(thePrice);
-             
+
               var cellName = ((special) ? 'brand_sale_cell' : 'brand_cell');
               var cellName2 = ((special) ? 'name_sale_cell' : 'name_cell');
               var cellName3 = ((special) ? 'thc_potency_sale_cell' : 'thc_potency_cell');
@@ -96,11 +99,13 @@ query ExampleMenuQuery {
 
               var $tr = $('<tr>').append(
                 $('<td class="'+ cellName +'">').text(item.brand.name),
-                $('<td class="'+ cellName2 +'">').text(item.name),
+
+                  $('<td class="'+ cellName2 +'">').text(((item.strainType.substring(0,3).toLowerCase().indexOf('not') > -1 ) ? item.name.split('|')[0] : item.name.split('|')[0] + ' ('+  item.strainType.substring(0,3) +')')),
+
                 $('<td class="'+ cellName3 +'">').text(item.potencyThc.formatted),
                 $('<td class="'+ cellName4 +'">').text(item.variants[0].option),
                 $('<td class="'+ cellName5 +'">').text('$ '+ addZeroes(thePrice))
-                  
+
                 ).appendTo('#records_preroll_table');
                 $("tr:even").css("background-color", "#eeeeee");
                 $("tr:odd").css("background-color", "#ffffff");
@@ -113,16 +118,18 @@ query ExampleMenuQuery {
          });
       </script>
    </head>
-   
+
    <body>
-     <div style="text-align: right"><img src="../images/joints_Right.jpg" width="976" height="120" style="vertical-align:top"></div>
+
     <div id="resultsDiv"> </div>
-    <h3>Prerolls</h3>
+
+    <h1>Prerolls</h1>
+
     <div id='columnedContainer'>
       <table id="records_preroll_table"></table>
       <!-- img src="../images/prerollsSide.jpg" /-->
     </div>
-    <img src="../images/joints_Left.jpg" width="976" height="120" style="vertical-align:bottom">
+    
     <div id="legendDiv"></div>
  </body>
 
